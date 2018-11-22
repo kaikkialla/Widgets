@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.RemoteViews;
 
@@ -36,6 +37,14 @@ public class Widget extends AppWidgetProvider {
             formatter.setTimeZone(TimeZone.getTimeZone("GMT+3"));
             Date date = new Date();
 
+
+
+
+
+
+
+
+
             remoteViews.setTextViewText(R.id.textView, formatter.format(date));
 
             appWidgetManager.updateAppWidget(currentId, remoteViews);
@@ -43,7 +52,7 @@ public class Widget extends AppWidgetProvider {
             Intent intent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            remoteViews.setOnClickPendingIntent(R.id.imageView, pendingIntent);
+            remoteViews.setOnClickPendingIntent(R.id.root_container, pendingIntent);
 
 
         }
@@ -66,11 +75,13 @@ public class Widget extends AppWidgetProvider {
     public void SchenduleUpdates(Context context, int[] appWidgetsIds) {
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
         final Intent intent = new Intent(context, Widget.class);
         intent.setAction(REQUEST_ACTION);
         intent.putExtra(appWidgetManager.EXTRA_APPWIDGET_ID,  appWidgetsIds);
-
         final PendingIntent pendingIntent= PendingIntent.getBroadcast(context, 0, intent, 0);
+
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(currentTimeMillis() + 60 * 1000);
         calendar.set(Calendar.MILLISECOND, 0);

@@ -25,10 +25,13 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget2_layout" />
+                android:resource="@xml/widget_settings" />
         </receiver>
 
-        <activity android:name=".WidgetPreferenceActivity">
+        <activity android:name=".WidgetSettingsActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
         </activity>
     </application>
 
