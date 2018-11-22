@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {//AppWidgetProvider
         setContentView(R.layout.activity_main);
 
         TextView textView = findViewById(R.id.text);
-        
+        /*
         //Получаем id виджета
         Bundle bundle = getIntent().getExtras();
         int id = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -28,5 +28,6 @@ public class MainActivity extends AppCompatActivity {//AppWidgetProvider
             appWidgetManager.updateAppWidget(id, new RemoteViews(this.getPackageName(), R.layout.widget_layout));
 
         }
+        */
     }
 }
