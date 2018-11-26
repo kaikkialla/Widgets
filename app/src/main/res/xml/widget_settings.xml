@@ -4,7 +4,16 @@
     android:updatePeriodMillis="86400000"
     android:previewImage="@drawable/icon"
     android:initialLayout="@layout/widget_layout_hor"
-    android:resizeMode="horizontal|vertical"
+    android:resizeMode="none"
     android:widgetCategory="home_screen"
-    android:configure="banana.digital.widget.WidgetSettingsActivity">
+    android:configure="banana.digital.widget.WidgetSettingsActivity"
+    android:minResizeWidth="40dp"
+    android:minResizeHeight="40dp">
 </appwidget-provider>
+
+
+<!--
+minHeight/Width - Размер при появлении
+minResizeWidth/Height - Минимальный размер ресайза
+resizeMode - направелние ресайза, можно отключить
+-->
