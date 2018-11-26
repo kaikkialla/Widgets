@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Widget</string>
+
+    <string-array name="patterns">
+        <item>dd/MM/yyyy HH:mm:ss</item>
+        <item>HH:mm:ss</item>
+        <item>HH:mm</item>
+    </string-array>
 </resources>
