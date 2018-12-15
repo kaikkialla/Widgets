@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <com.kizitonwose.colorpreference.ColorPreference
+        android:defaultValue="#000000"
+        android:key="widget_color"
+        android:title="Цвет фона"
+        app:colorShape="circle"
+        app:viewSize="large"
+        app:numColumns="5"
+        app:showDialog="true" />
+
+    <ListPreference
+        android:defaultValue="HH:mm:ss"
+        android:key="widget_date_pattern"
+        android:entries="@array/patterns"
+        android:entryValues="@array/patterns"
+        android:title="Паттерн"
+        android:summary="Выберите паттерн"/>
+
+</PreferenceScreen>

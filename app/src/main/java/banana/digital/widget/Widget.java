@@ -11,8 +11,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.annotation.RequiresApi;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.text.SimpleDateFormat;
@@ -30,50 +32,51 @@ public class Widget extends AppWidgetProvider {
 
 
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        for(int i = 0; i < appWidgetIds.length; i++) {
-            int currentId = appWidgetIds[i];
-            remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout_hor);
+        for (int i = 0; i< appWidgetIds.length; i++) {
+            final int widgetId = appWidgetIds[i]; // получаем id очередного виджета
+            final Bundle widgetOptions = appWidgetManager.getAppWidgetOptions(widgetId);
+            final int minHeight = widgetOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+            final RemoteViews views;
+            views = new RemoteViews(context.getPackageName(), R.layout.widget_layout_hor);
 
 
-            SharedPreferences PatternSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            String pattern = PatternSharedPreferences.getString("widget_date_pattern", "HH:mm:ss");
+
+            final SharedPreferences sharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
+            final String pattern = sharedPreferences.getString("widget_date_pattern_" + widgetId, "HH:mm");
+            final int color = sharedPreferences.getInt("widget_color_" + widgetId, Color.BLACK);
+
+
             SimpleDateFormat formatter = new SimpleDateFormat(pattern);
             formatter.setTimeZone(TimeZone.getTimeZone("GMT+3"));
             Date date = new Date();
 
 
-            SharedPreferences ColorSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            int color = ColorSharedPreferences.getInt("widget_color", Color.BLACK);
-            remoteViews.setInt(R.id.root_container,"setBackgroundColor", color);
+            //final String displayedTime = pattern.format(String.valueOf(new Date(currentTimeMillis()))); // форматируем текущее время
+            views.setTextViewText(R.id.textView,formatter.format(date)); // меняем в виджете
+            views.setInt(R.id.root_container, "setBackgroundColor", color);
 
-
-            remoteViews.setTextViewText(R.id.textView, formatter.format(date));
-
-
-            appWidgetManager.updateAppWidget(currentId, remoteViews);
-
-
-            Intent intent = new Intent(context, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-
-            remoteViews.setOnClickPendingIntent(R.id.root_container, pendingIntent);
+            appWidgetManager.updateAppWidget(widgetId, views); // обновляем виджет
         }
-        SchenduleUpdates(context, appWidgetIds);
-
+        ScheduleUpdates(context); // подписываем виджеты на обновление через 1 минуту
     }
 
 
 
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction() != null && intent.getAction().equals(REFRESH_ACTION)) { // если это наш интент
             final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context); // получаем инстанс AppWidgetManager
-            //final int[] appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS); // получаем widget ids
-            final ComponentName name = new ComponentName(context, Widget.class); // получаем widget ids
+            final ComponentName name = new ComponentName(context,  Widget.class);
             final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(name);
             onUpdate(context, appWidgetManager, appWidgetIds); // обновляем виджеты
         } else {
@@ -95,7 +98,7 @@ public class Widget extends AppWidgetProvider {
 
 
 
-    public void SchenduleUpdates(Context context, int[] appWidgetsIds) {
+    public void ScheduleUpdates(Context context) {
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
